@@ -1,0 +1,60 @@
+<ion-content class="bg">  
+
+  <div class="center">
+    <h1>SOS</h1>
+  </div>
+  <!-- <div class="ion-text-center ion-padding-top">
+    <h1 class="" color="white" >SOS</h1>    
+  </div> -->
+  
+
+  <ion-grid style="height: 100%;position: fixed;" >    
+    <ion-row justify-content-center align-items-center style="height: 100%;">
+      <form class="ion-padding"  [formGroup]="validations_form" (ngSubmit)="onSubmit(validations_form.value)">        
+        <ion-item>
+          <ion-label position="stacked" color="dark">Email ID
+          </ion-label>
+          <ion-input type="text" formControlName="email"></ion-input>
+        </ion-item>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_messages.email">
+            <div class="error-message"
+              *ngIf="validations_form.get('email').hasError(validation.type) && (validations_form.get('email').dirty || validations_form.get('email').touched)">
+              <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
+  
+        <ion-item>
+          <ion-label position="stacked" color="dark">Password</ion-label>
+          <ion-input formControlName="password" [type]="showPassword ? 'password' : 'text'" clearOnEdit="false">
+          </ion-input>
+          <ion-icon slot="end" class="ion-padding-top" (click)="onPasswordToggle()" ion-button clear small icon-only
+            [name]="showPassword ? 'eye-off' : 'eye'"></ion-icon>
+        </ion-item>
+  
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_messages.password">
+            <div class="error-message"
+              *ngIf="validations_form.get('password').hasError(validation.type) && (validations_form.get('password').dirty || validations_form.get('password').touched)">
+              <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
+  
+        <div text-center class="ion-padding">
+          <ion-button text-center    shape="round" type="submit" [disabled]="!validations_form.valid">Login</ion-button>
+        </div>
+  
+        <div text-center>
+         Don't have an account? <ion-text color="primary"   routerLink="/register" routerDirection="forward"><u>Sign Up</u></ion-text>
+        </div>
+  
+      </form>
+    </ion-row>
+  </ion-grid> 
+
+  
+   
+</ion-content>
+

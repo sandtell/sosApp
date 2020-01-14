@@ -1,0 +1,78 @@
+<ion-content>
+  <div class="customDiv">
+    <!-- <div class="vl">
+      <ion-icon ios="ios-bonfire" md="md-bonfire"></ion-icon>
+    </div> -->
+    <ion-grid >
+      <ion-row>
+        <ion-col size="3" text-center (click)="callFn(100)"  >
+          <ion-text color="light">
+            <p>FIRE</p>
+          </ion-text>
+          <ion-icon ios="ios-bonfire" md="md-bonfire"></ion-icon>
+          <ion-text color="light">
+            <h3>101</h3>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="1" text-center>
+          <div class="vl">&nbsp;</div>
+        </ion-col>
+
+        <ion-col size="4" (click)="callFn(103)" >
+          <ion-text color="light">
+            <p>AMBULANCE</p>
+          </ion-text>
+          <ion-icon ios="ios-add" md="md-add"></ion-icon>
+          <ion-text color="light">
+            <h3>103</h3>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="1" text-center>
+          <div class="vl">&nbsp;</div>
+        </ion-col>
+
+        <ion-col size="3" (click)="callFn(102)" >
+          <ion-text color="light">
+            <p>POLICE</p>
+          </ion-text>
+          <img src="../../assets/icon/police.png" height="50" >
+          <ion-text color="light">
+            <h3>102</h3>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <div class="ion-padding-top">
+      <hr> 
+    </div>
+   
+    <div text-center>
+      <ion-text color="light">
+        <p class="ion-padding-bottom">India</p>
+      </ion-text>
+    </div>
+   
+  </div>
+  
+  
+
+  <div text-center class="ion-padding-top">
+    <b>NEOCOM 100</b>
+    <ion-text color="dark">
+    <p>  <b class="smallFont">1st Main Rd, Seethammai Extension Teynapet CH 18</b></p>
+    </ion-text>
+    <ion-item-divider color="gray" style="background-color:gray;" >
+      <ion-label slot="start">
+        <b class="smallFont">NETCOM 100 Non-Emergency</b>
+      </ion-label>
+      <ion-label slot="end">
+        <b class="smallFont">+91-044 2434 1159&nbsp;</b>
+      </ion-label>
+    </ion-item-divider>
+  </div>
+
+  
+  
+</ion-content>
