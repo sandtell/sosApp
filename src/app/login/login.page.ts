@@ -81,7 +81,7 @@ export class LoginPage implements OnInit {
 
           localStorage.setItem('lsUserID',result.data[0].user_id);
           localStorage.setItem('lsUserName',result.data[0].name);
-          localStorage.setItem('lsEmail',result.data[0].email);
+          localStorage.setItem('lsEmail',result.data[0].user_email);
           localStorage.setItem('lsuserMobile',result.data[0].user_mobile);
           localStorage.setItem('lsAPIToken',result.data[0].api_token);
 

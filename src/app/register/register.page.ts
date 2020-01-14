@@ -111,39 +111,34 @@ export class RegisterPage implements OnInit {
   }
 
   async onSubmit(values) {
-    // let data: any;
-    // const url = this.config.domainURL + 'signup';
-    // const loading = await this.loadingCtrl.create({
-    //   spinner : 'bubbles',
-    //   message: 'Creating New User ...',
-    // });
-    // data = this.http.post(url, values);
-    // loading.present().then(() => {
-    //   data.subscribe(result => {
-    //     console.log(result);
+    let data: any;
+    const url = this.config.domainURL + 'signup';
+    const loading = await this.loadingCtrl.create({
+      spinner : 'bubbles',
+      message: 'Creating New User ...',
+    });
+    data = this.http.post(url, values);
+    loading.present().then(() => {
+      data.subscribe(result => {
+        console.log(result);
 
-    //     if (result.status === "1") {
-    //       this.authService.login()
-    //       localStorage.setItem('lsUserID', result.data.user_id);
-    //       localStorage.setItem('lsUserName', result.data.user_name);
-    //       localStorage.setItem('lsEmail', result.data.user_email);
-    //       localStorage.setItem('lsMobileNo', result.data.user_mobile);
-    //       this.router.navigateByUrl('tabs');
-    //       this.presentToast(result.message);
-    //     } else if (result.status === "0") {
-    //       this.presentToast(result.message);
-    //     }
+        if (result.status === "1") {
+          this.router.navigateByUrl('login');
+          this.presentToast(result.message);
+        } else if (result.status === "0") {
+          this.presentToast(result.message);
+        }
 
         
-    //     loading.dismiss();
-    //   });
-    //   return loading.present();
-    // }, error => {
-    //   console.log(error);
-    //   loading.dismiss();
-    // });
+        loading.dismiss();
+      });
+      return loading.present();
+    }, error => {
+      console.log(error);
+      loading.dismiss();
+    });
 
-    // this.validations_form.reset();
+    this.validations_form.reset();
 
     console.log(values);
 

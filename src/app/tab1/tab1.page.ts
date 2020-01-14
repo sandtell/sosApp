@@ -1,18 +1,20 @@
 import { Component } from '@angular/core';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
-import { Platform } from '@ionic/angular';
+import { Platform, LoadingController } from '@ionic/angular';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { ConfigService } from '../services/config.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
-  locationCoords: any;
+  emergency: any;
   
   public isShow:boolean = false;
   constructor(
@@ -22,21 +24,25 @@ export class Tab1Page {
     private androidPermissions : AndroidPermissions,
     private locationAccuracy :LocationAccuracy,
     private geolocation : Geolocation,
-    private config : ConfigService
+    private config : ConfigService,
+    public http: HttpClient,
+    public loadingCtrl: LoadingController,
+
     )
    {
-    this.locationCoords = {
+    this.emergency = {
       latitude: "",
       longitude: "",
       accuracy: "",
-      timestamp: ""
+      timestamp: "",
     }
    
    }
 
   ngOnInit() {
 
-    console.log(this.config.userID);
+    console.log(localStorage.getItem('lsUserID'));
+    // console.log(this.config.userID);
 
     // this.checkGPSPermission();
 
@@ -111,19 +117,51 @@ export class Tab1Page {
 
   getLocationCoordinates() {
     this.geolocation.getCurrentPosition().then((resp) => {
-      this.locationCoords.latitude = resp.coords.latitude;
-      this.locationCoords.longitude = resp.coords.longitude;
-      this.locationCoords.accuracy = resp.coords.accuracy;
-      this.locationCoords.timestamp = resp.timestamp;
-
-      console.log(this.locationCoords);
+      this.emergency.latitude = resp.coords.latitude;
+      this.emergency.longitude = resp.coords.longitude;
+      this.emergency.accuracy = resp.coords.accuracy;
+      this.emergency.timestamp = resp.timestamp;
+      // this.emergency.userID = localStorage.getItem('lsUserID');
+      // this.emergency.apiToken = localStorage.getItem('lsAPIToken');
+      
+      console.log(this.emergency);
+      this.callEmergencyFn(this.emergency);
 
     }).catch((error) => {
       alert('Error getting location' + error);
     });
   }
 
+
+  async callEmergencyFn(formData) {
+
+    console.log(localStorage.getItem('lsEmail'));
+
+    const apiToken = localStorage.getItem('lsAPIToken');
+    const userEmailID = localStorage.getItem('lsEmail');
+
+    const headers = new HttpHeaders().set('Api_Token', apiToken).set('User_Email', userEmailID);
+    let data: Observable<any>;
+    let url = this.config.domainURL + 'emergency';
+    const loading = await this.loadingCtrl.create({
+      message: 'Please Wait...',
+    });
+
+    data = this.http.post(url, formData, { headers: headers });
+    loading.present().then(() => {
+      data.subscribe(result => {
+        console.log(result);
+        loading.dismiss();
+      });
+      return loading.present();
+    }, error => {
+      console.log(error);
+      loading.dismiss();
+    });
+  }
    
+
+
 
   // logOutFn(){
   //   this.storage.clear().then(() => {
