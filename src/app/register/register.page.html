@@ -1,4 +1,5 @@
-<ion-content class="bg">
+<!-- <ion-content class="bg"> -->
+  <ion-content>
 
   <div class="center">
     <h1>SOS</h1>
@@ -24,7 +25,7 @@
 
 
         <ion-item>
-          <ion-label position="stacked" color="dark">Email ID
+          <ion-label position="stacked" color="primary">Email ID
           </ion-label>
           <ion-input type="text" formControlName="email"></ion-input>
         </ion-item>
@@ -38,7 +39,7 @@
         </div>
 
         <ion-item>
-          <ion-label position="stacked" color="dark">Password</ion-label>
+          <ion-label position="stacked" color="primary">Password</ion-label>
           <ion-input formControlName="password" [type]="showPassword ? 'password' : 'text'" clearOnEdit="false">
           </ion-input>
           <ion-icon slot="end" class="ion-padding-top" (click)="onPasswordToggle()" ion-button clear small icon-only
@@ -83,6 +84,48 @@
             </div>
           </ng-container>
         </div>
+
+
+        <ion-item>
+          <ion-label position="stacked" color="primary">Alternative Mobile No 1
+          </ion-label>
+          <ion-input type="text" formControlName="altMobNo"></ion-input>
+        </ion-item>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_messages.altMobNo">
+            <div class="error-message"
+              *ngIf="validations_form.get('altMobNo').hasError(validation.type) && (validations_form.get('altMobNo').dirty || validations_form.get('altMobNo').touched)">
+              <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
+
+        <ion-item>
+          <ion-label position="stacked" color="primary">Alternative Mobile No 2
+          </ion-label>
+          <ion-input type="text" formControlName="altMobNo2"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked" color="primary">Alternative Email ID 1
+          </ion-label>
+          <ion-input type="text" formControlName="altEmail"></ion-input>
+        </ion-item>
+        <div class="validation-errors">
+          <ng-container *ngFor="let validation of validation_messages.altEmail">
+            <div class="error-message"
+              *ngIf="validations_form.get('altEmail').hasError(validation.type) && (validations_form.get('altEmail').dirty || validations_form.get('altEmail').touched)">
+              <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
+
+        <ion-item>
+          <ion-label position="stacked" color="primary">Alternative Email ID 2
+          </ion-label>
+          <ion-input type="text" formControlName="altEmail2"></ion-input>
+        </ion-item>
+         
 
         <div text-center class="ion-padding">
           <ion-button text-center shape="round" type="submit" [disabled]="!validations_form.valid">Sign Up</ion-button>

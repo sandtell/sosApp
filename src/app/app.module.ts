@@ -17,7 +17,9 @@ import { AuthenticationService } from './services/authentication.service';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
-
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -39,6 +41,9 @@ import { Shake } from '@ionic-native/shake/ngx';
     CallNumber,
     ScreenOrientation,
     Shake,
+    Geolocation,
+    AndroidPermissions,
+    LocationAccuracy,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

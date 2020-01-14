@@ -5,5 +5,8 @@ import { Injectable } from '@angular/core';
 })
 export class ConfigService {
   public domainURL = 'https://sos.brilienzacademy.in/api/';
-  constructor() { }
+  public userID;
+  constructor() {
+    this.userID = localStorage.getItem('lsUserID');
+   }
 }

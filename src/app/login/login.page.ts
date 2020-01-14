@@ -76,17 +76,22 @@ export class LoginPage implements OnInit {
 
         if (result.status === "1") {
           this.authService.login()
-          localStorage.setItem('localUserName',result.data[0].name);
 
-          this.storage.set('lsUserID', result.data[0].id);
-          this.storage.set('lsUserName', result.data[0].name);
-          this.storage.set('lsEmail',  result.data[0].email);
-          this.storage.set('lsPassword', result.data[0].password);
-          this.storage.set('lsMobileNo',  result.data[0].mobile);
-          this.storage.set('lsRelative',  result.data[0].relative_name);
-          this.storage.set('lsMemberCategory',  result.data[0].category);
-          this.storage.set('lsCategory',  result.data[0].category);
-          this.storage.set('lsChapter', result.data[0].chapter_type);
+          // console.log(result.data[0].user_id);
+
+          localStorage.setItem('lsUserID',result.data[0].user_id);
+          localStorage.setItem('lsUserName',result.data[0].name);
+          localStorage.setItem('lsEmail',result.data[0].email);
+          localStorage.setItem('lsuserMobile',result.data[0].user_mobile);
+          localStorage.setItem('lsAPIToken',result.data[0].api_token);
+
+
+
+          // this.storage.set('lsUserID', result.data[0].id);
+          // this.storage.set('lsUserName', result.data[0].name);
+          // this.storage.set('lsEmail',  result.data[0].email);
+          // this.storage.set('lsPassword', result.data[0].password);
+          // this.storage.set('lsMobileNo',  result.data[0].mobile);
           
          //this.router.navigateByUrl('/tabs');
          this.router.navigateByUrl('tabs');
@@ -117,7 +122,8 @@ export class LoginPage implements OnInit {
   async presentToast(msg:string) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 2000
+      duration: 2000,
+      showCloseButton : true,
     });
     toast.present();
   }

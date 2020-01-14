@@ -56,6 +56,18 @@ export class RegisterPage implements OnInit {
         Validators.required,
         Validators.pattern('^[0-9]*$')
       ])),
+      altMobNo: new FormControl('', Validators.compose([
+        Validators.minLength(10),
+        Validators.maxLength(10),
+        Validators.required,
+        Validators.pattern('^[0-9]*$')
+      ])),
+      altMobNo2: new FormControl(''),
+      altEmail: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
+      ])),
+      altEmail2 : new FormControl(''),
     });
 
   }
@@ -82,6 +94,16 @@ export class RegisterPage implements OnInit {
       { type: 'maxlength', message: 'Mobile No cannot be more than 10' },
       { type: 'pattern', message: 'Chapter are not allowed' }
     ],
+    altMobNo :[
+      { type: 'required', message: 'Alternative number is required.' },
+      { type: 'minlength', message: 'Mobile No must be at least 10' },
+      { type: 'maxlength', message: 'Mobile No cannot be more than 10' },
+      { type: 'pattern', message: 'Chapter are not allowed' }
+    ],
+    altEmail :[
+      { type: 'required', message: 'Alternative Email is required.' },
+      { type: 'pattern', message: 'Please enter a valid email.' }
+    ]
   };
 
   onPasswordToggle(): void {
@@ -89,39 +111,39 @@ export class RegisterPage implements OnInit {
   }
 
   async onSubmit(values) {
-    let data: any;
-    const url = this.config.domainURL + 'signup';
-    const loading = await this.loadingCtrl.create({
-      spinner : 'bubbles',
-      message: 'Creating New User ...',
-    });
-    data = this.http.post(url, values);
-    loading.present().then(() => {
-      data.subscribe(result => {
-        console.log(result);
+    // let data: any;
+    // const url = this.config.domainURL + 'signup';
+    // const loading = await this.loadingCtrl.create({
+    //   spinner : 'bubbles',
+    //   message: 'Creating New User ...',
+    // });
+    // data = this.http.post(url, values);
+    // loading.present().then(() => {
+    //   data.subscribe(result => {
+    //     console.log(result);
 
-        if (result.status === "1") {
-          this.authService.login()
-          localStorage.setItem('lsUserID', result.data.user_id);
-          localStorage.setItem('lsUserName', result.data.user_name);
-          localStorage.setItem('lsEmail', result.data.user_email);
-          localStorage.setItem('lsMobileNo', result.data.user_mobile);
-          this.router.navigateByUrl('tabs');
-          this.presentToast(result.message);
-        } else if (result.status === "0") {
-          this.presentToast(result.message);
-        }
+    //     if (result.status === "1") {
+    //       this.authService.login()
+    //       localStorage.setItem('lsUserID', result.data.user_id);
+    //       localStorage.setItem('lsUserName', result.data.user_name);
+    //       localStorage.setItem('lsEmail', result.data.user_email);
+    //       localStorage.setItem('lsMobileNo', result.data.user_mobile);
+    //       this.router.navigateByUrl('tabs');
+    //       this.presentToast(result.message);
+    //     } else if (result.status === "0") {
+    //       this.presentToast(result.message);
+    //     }
 
         
-        loading.dismiss();
-      });
-      return loading.present();
-    }, error => {
-      console.log(error);
-      loading.dismiss();
-    });
+    //     loading.dismiss();
+    //   });
+    //   return loading.present();
+    // }, error => {
+    //   console.log(error);
+    //   loading.dismiss();
+    // });
 
-    this.validations_form.reset();
+    // this.validations_form.reset();
 
     console.log(values);
 
