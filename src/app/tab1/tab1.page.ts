@@ -8,6 +8,14 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { ConfigService } from '../services/config.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {
+  GoogleMaps,
+  GoogleMap,
+  GoogleMapsEvent,
+  LatLng,
+  MarkerOptions,
+  Marker
+} from "@ionic-native/google-maps";
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -44,16 +52,58 @@ export class Tab1Page {
     console.log(localStorage.getItem('lsUserID'));
     // console.log(this.config.userID);
 
-    // this.checkGPSPermission();
+    this.checkGPSPermission();
+
+    this.loadMap();
 
     this.plt.ready().then(() => {
       const watch = this.shake.startWatch(60).subscribe(() => {
         alert('shake working');
         this.isShow = true;
-        this.getLocationCoordinates();
+        // this.getLocationCoordinates();
+        this.callEmergencyFn(this.emergency);
       });
       // watch.unsubscribe();      
     });
+  }
+
+
+  loadMap() {
+
+    let lat;
+    let lng;
+    this.geolocation.getCurrentPosition().then((position) => {
+      lat = position.coords.latitude;
+      lng = position.coords.longitude;
+    });
+
+    let map = GoogleMaps.create('map');
+
+    map.one(GoogleMapsEvent.MAP_READY).then((data: any) => {
+
+      
+      let coordinates: LatLng = new LatLng(lat, lng);
+
+      // alert(coordinates);
+
+      let position = {
+        target: coordinates,
+        zoom: 14
+      };
+
+      map.animateCamera(position);
+
+      let markerOptions: MarkerOptions = {
+        position: coordinates,
+        icon: "../../assets/location.PNG",
+        title: 'Your Current Location'
+      };
+
+      const marker = map.addMarker(markerOptions)
+        .then((marker: Marker) => {
+          marker.showInfoWindow();
+        });
+    })
   }
 
    callFn(number) {
@@ -63,7 +113,8 @@ export class Tab1Page {
 
   sendSMSEmail(){
     this.isShow = true;
-    this.getLocationCoordinates();
+    // this.getLocationCoordinates();
+    this.callEmergencyFn(this.emergency);
   }
 
 
@@ -125,7 +176,7 @@ export class Tab1Page {
       // this.emergency.apiToken = localStorage.getItem('lsAPIToken');
       
       console.log(this.emergency);
-      this.callEmergencyFn(this.emergency);
+      
 
     }).catch((error) => {
       alert('Error getting location' + error);
@@ -144,7 +195,8 @@ export class Tab1Page {
     let data: Observable<any>;
     let url = this.config.domainURL + 'emergency';
     const loading = await this.loadingCtrl.create({
-      message: 'Please Wait...',
+      message: 'Calling...',
+      spinner : 'bubbles',
     });
 
     data = this.http.post(url, formData, { headers: headers });

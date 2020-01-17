@@ -10,5 +10,51 @@
 </ion-header>
 
 <ion-content>
+  <form class="ion-padding"  [formGroup]="validations_form" (ngSubmit)="onSubmit(validations_form.value)">        
+    <ion-item>
+      <ion-label position="stacked" color="dark">Alternative Mobile No 1
+      </ion-label>
+      <ion-input type="text" (ionFocus)="getContact('mobile1')" formControlName="altMobNo"></ion-input>
+    </ion-item>
+    <div class="validation-errors">
+      <ng-container *ngFor="let validation of validation_messages.altMobNo">
+        <div class="error-message"
+          *ngIf="validations_form.get('altMobNo').hasError(validation.type) && (validations_form.get('altMobNo').dirty || validations_form.get('altMobNo').touched)">
+          <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+        </div>
+      </ng-container>
+    </div>
 
+    <ion-item>
+      <ion-label position="stacked" color="dark">Alternative Mobile No 2
+      </ion-label>
+      <ion-input type="text" (ionFocus)="getContact('mobile2')" formControlName="altMobNo2"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked" color="dark">Alternative Email ID 1
+      </ion-label>
+      <ion-input type="text" formControlName="altEmail"></ion-input>
+    </ion-item>
+    <div class="validation-errors">
+      <ng-container *ngFor="let validation of validation_messages.altEmail">
+        <div class="error-message"
+          *ngIf="validations_form.get('altEmail').hasError(validation.type) && (validations_form.get('altEmail').dirty || validations_form.get('altEmail').touched)">
+          <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+        </div>
+      </ng-container>
+    </div>
+
+    <ion-item>
+      <ion-label position="stacked" color="dark">Alternative Email ID 2
+      </ion-label>
+      <ion-input type="text" formControlName="altEmail2"></ion-input>
+    </ion-item>
+     
+
+    <div text-center class="ion-padding">
+      <ion-button text-center    shape="round" type="submit" [disabled]="!validations_form.valid">Submit</ion-button>
+    </div>    
+
+  </form>
 </ion-content>

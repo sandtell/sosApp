@@ -89,7 +89,7 @@
         <ion-item>
           <ion-label position="stacked" color="primary">Alternative Mobile No 1
           </ion-label>
-          <ion-input type="text" formControlName="altMobNo"></ion-input>
+          <ion-input type="text" (ionFocus)="getContact('mobile1')" formControlName="altMobNo"></ion-input>
         </ion-item>
         <div class="validation-errors">
           <ng-container *ngFor="let validation of validation_messages.altMobNo">
@@ -103,7 +103,7 @@
         <ion-item>
           <ion-label position="stacked" color="primary">Alternative Mobile No 2
           </ion-label>
-          <ion-input type="text" formControlName="altMobNo2"></ion-input>
+          <ion-input type="text" (ionFocus)="getContact('mobile2')" formControlName="altMobNo2"></ion-input>
         </ion-item>
 
         <ion-item>

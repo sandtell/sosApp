@@ -7,5 +7,25 @@
 </ion-header>
 
 <ion-content>
+  <form class="ion-padding" [formGroup]="validations_form" (ngSubmit)="onSubmit(validations_form.value)">
+    <ion-item>
+      <ion-label position="stacked" color="dark">Create Message
+      </ion-label>
+      <ion-textarea clearOnEdit="true" formControlName="message" rows="4" cols="20"
+        placeholder="Enter emergency notes..."></ion-textarea>
+    </ion-item>
+    <div class="validation-errors">
+      <ng-container *ngFor="let validation of validation_messages.message">
+        <div class="error-message"
+          *ngIf="validations_form.get('message').hasError(validation.type) && (validations_form.get('message').dirty || validations_form.get('message').touched)">
+          <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+        </div>
+      </ng-container>
+    </div>
   
+    <div text-center class="ion-padding">
+      <ion-button text-center shape="round" type="submit" [disabled]="!validations_form.valid">Submit</ion-button>
+    </div>
+  
+  </form>
 </ion-content>

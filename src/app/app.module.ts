@@ -20,6 +20,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { HttpClientModule } from '@angular/common/http';
+import { Contacts } from '@ionic-native/contacts/ngx';
+import { GoogleMaps } from "@ionic-native/google-maps";
 // import { HTTP_INTERCEPTORS,  HttpClientModule } from '@angular/common/http';
 // import { HttpConfigInterceptor } from './services/httpConfig.interceptor';
 @NgModule({
@@ -45,6 +47,8 @@ import { HttpClientModule } from '@angular/common/http';
     Geolocation,
     AndroidPermissions,
     LocationAccuracy,
+    Contacts,
+    GoogleMaps,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     // {
     //   provide: HTTP_INTERCEPTORS,

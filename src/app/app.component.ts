@@ -100,7 +100,8 @@ export class AppComponent {
   async presentToast(msg) {
     const toast = await this.toastCtrl.create({
       message: msg,
-      duration: 2000
+      duration: 2000,
+      showCloseButton : true,
     });
     toast.present();
   }

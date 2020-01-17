@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { ConfigService } from '../services/config.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from '../services/authentication.service';
-
+import { Contacts } from '@ionic-native/contacts/ngx';
 
 @Component({
   selector: 'app-register',
@@ -27,10 +27,25 @@ export class RegisterPage implements OnInit {
     private router: Router,
     private config:ConfigService,
     public http: HttpClient,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private contacts: Contacts
   ) {
   
 
+  }
+
+  getContact(variable) {
+    let remove91;   
+    this.contacts.pickContact().then((contact) => {
+        // alert('displayName = ' + contact.displayName);
+        // alert('phoneNumbers = ' + contact.phoneNumbers[0].value);
+        remove91 = contact.phoneNumbers[0].value.replace('+91','');
+        if(variable === "mobile1") {
+          this.validations_form.controls['altMobNo'].setValue(remove91.replace(/\s/g,''));
+        }else if (variable =="mobile2") {
+          this.validations_form.controls['altMobNo2'].setValue(remove91.replace(/\s/g,''));
+        }
+    });
   }
 
   ngOnInit() { 
@@ -150,7 +165,8 @@ export class RegisterPage implements OnInit {
   async presentToast(msg:string) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 2000
+      duration: 2000,
+      showCloseButton : true,
     });
     toast.present();
   }

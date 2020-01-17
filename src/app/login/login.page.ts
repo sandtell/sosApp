@@ -68,6 +68,7 @@ export class LoginPage implements OnInit {
     const url = this.config.domainURL + 'login';
     const loading = await this.loadingCtrl.create({
       message: 'Please Wait...',
+      spinner : 'bubbles',
     });
     data = this.http.post(url,values);
     loading.present().then(() => {
@@ -76,29 +77,21 @@ export class LoginPage implements OnInit {
 
         if (result.status === "1") {
           this.authService.login()
-
-          // console.log(result.data[0].user_id);
-
+         // console.log(result.data[0].user_id);
           localStorage.setItem('lsUserID',result.data[0].user_id);
           localStorage.setItem('lsUserName',result.data[0].name);
           localStorage.setItem('lsEmail',result.data[0].user_email);
           localStorage.setItem('lsuserMobile',result.data[0].user_mobile);
           localStorage.setItem('lsAPIToken',result.data[0].api_token);
-
-
-
           // this.storage.set('lsUserID', result.data[0].id);
           // this.storage.set('lsUserName', result.data[0].name);
           // this.storage.set('lsEmail',  result.data[0].email);
           // this.storage.set('lsPassword', result.data[0].password);
-          // this.storage.set('lsMobileNo',  result.data[0].mobile);
-          
+          // this.storage.set('lsMobileNo',  result.data[0].mobile);      
          //this.router.navigateByUrl('/tabs');
          this.router.navigateByUrl('tabs');
-
           this.presentToast(result.message);
           loading.dismiss();
-
         }
          else if (result.status === "0") {
           // alert("else");
