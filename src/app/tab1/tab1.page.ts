@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component , OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
-import { Platform, LoadingController } from '@ionic/angular';
+import { Platform, LoadingController, AlertController } from '@ionic/angular';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation/ngx';
 import { ConfigService } from '../services/config.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -16,12 +16,21 @@ import {
   MarkerOptions,
   Marker
 } from "@ionic-native/google-maps";
+declare var google;
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
+
+  @ViewChild('map', {static : true }) mapElement: ElementRef;
+  private options: GeolocationOptions;
+  private currentPos: Geoposition;
+  private userLat: any;
+  private userLong: any;
+  private map: any;
+
   emergency: any;
   
   public isShow:boolean = false;
@@ -35,7 +44,7 @@ export class Tab1Page {
     private config : ConfigService,
     public http: HttpClient,
     public loadingCtrl: LoadingController,
-
+    public alertController: AlertController
     )
    {
     this.emergency = {
@@ -51,10 +60,8 @@ export class Tab1Page {
 
     console.log(localStorage.getItem('lsUserID'));
     // console.log(this.config.userID);
-
-    this.checkGPSPermission();
-
-    this.loadMap();
+ 
+    this.getUserPosition();
 
     this.plt.ready().then(() => {
       const watch = this.shake.startWatch(60).subscribe(() => {
@@ -68,42 +75,56 @@ export class Tab1Page {
   }
 
 
-  loadMap() {
+  getUserPosition() {
+    this.options = {
+      enableHighAccuracy : true
+    };
+    this.geolocation.getCurrentPosition(this.options).then((pos: Geoposition) => {
+      this.currentPos = pos;
+      this.userLat = pos.coords.latitude;
+      this.userLong = pos.coords.longitude;
+      this.addMap(pos.coords.latitude, pos.coords.longitude);
+    }, (err: PositionError) => {
+      console.log('error: ' + err.message);
+    });
+  }
 
-    let lat;
-    let lng;
-    this.geolocation.getCurrentPosition().then((position) => {
-      lat = position.coords.latitude;
-      lng = position.coords.longitude;
+  addMap(lat, long) {
+    const latLng = new google.maps.LatLng(lat, long);
+
+    const mapOptions = {
+      center: latLng,
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+    this.addMarker();
+  }
+
+  addMarker() {
+    // const userMarker = 'assets/img/custom_icon.jpg';
+    const marker = new google.maps.Marker({
+      map: this.map,
+      animation: google.maps.Animation.DROP,
+      position: this.map.getCenter(),
+      // icon: userMarker
     });
 
-    let map = GoogleMaps.create('map');
+    google.maps.event.addListener(marker, 'click', () => {
+      this.presentAlert();
+    });
+  }
 
-    map.one(GoogleMapsEvent.MAP_READY).then((data: any) => {
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'My Location',
+      subHeader: '',
+      message: 'latitude: ' + this.userLat + '<br>Longitude: ' + this.userLong,
+      buttons: ['OK']
+    });
 
-      
-      let coordinates: LatLng = new LatLng(lat, lng);
-
-      // alert(coordinates);
-
-      let position = {
-        target: coordinates,
-        zoom: 14
-      };
-
-      map.animateCamera(position);
-
-      let markerOptions: MarkerOptions = {
-        position: coordinates,
-        icon: "../../assets/location.PNG",
-        title: 'Your Current Location'
-      };
-
-      const marker = map.addMarker(markerOptions)
-        .then((marker: Marker) => {
-          marker.showInfoWindow();
-        });
-    })
+    await alert.present();
   }
 
    callFn(number) {
@@ -118,54 +139,9 @@ export class Tab1Page {
   }
 
 
-  checkGPSPermission() {
-    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
-      result => {
-        if (result.hasPermission) { 
-          //If having permission show 'Turn On GPS' dialogue
-          this.askToTurnOnGPS();
-        } else { 
-          //If not having permission ask for permission
-          this.requestGPSPermission();
-        }
-      },
-      err => {
-        alert(err);
-      }
-    );
-  }
+  
 
-  requestGPSPermission() {
-    this.locationAccuracy.canRequest().then((canRequest: boolean) => {
-      if (canRequest) {
-        console.log("4");
-      } else {
-        //Show 'GPS Permission Request' dialogue
-        this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
-          .then(
-            () => {
-              // call method to turn on GPS
-              this.askToTurnOnGPS();
-            },
-            error => {
-              //Show alert if user click on 'No Thanks'
-              alert('requestPermission Error requesting location permissions ' + error)
-            }
-          );
-      }
-    });
-  }
-
-  askToTurnOnGPS() {
-    this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-      () => {
-        // When GPS Turned ON call method to get Accurate location coordinates
-        this.getLocationCoordinates()
-      },
-      error => alert('Error requesting location permissions ' + JSON.stringify(error))
-    );
-  }
-
+   
   getLocationCoordinates() {
     this.geolocation.getCurrentPosition().then((resp) => {
       this.emergency.latitude = resp.coords.latitude;
